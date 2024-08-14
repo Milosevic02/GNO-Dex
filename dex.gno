@@ -62,8 +62,6 @@ func Swap(fromTokenSym,toTokenSym string,fromAmount uint64) string{
 		panic("token to swap into does not exist in the bucket")
 	}
 
-	toAmount := fromAmount
-
 	toAmountInBucket := bucket[toTokenSym]
 	if toAmountInBucket == 0 {
 		panic("token to swap into does not exist in the bucket")
@@ -72,6 +70,9 @@ func Swap(fromTokenSym,toTokenSym string,fromAmount uint64) string{
 	if toAmountInBucket < toAmount{
 		panic("not enough liquidity for the token you're swapping into")
 	}
+
+	toAmount := (fromAmount * toAmountInBucket) / (fromAmountInBucket + fromAmount)
+
 
 	if fromTokenSym == "foo" {
 		foo20.TransferFrom(pusers.AddressOrName(caller.String()), pusers.AddressOrName(dex.Addr().String()), fromAmount)
